@@ -138,18 +138,22 @@ export function PersonaSelector(props: { conversationId: DConversationId, runExa
 
 
   // derived state
+  // **Scenario 1 Fix (uncomment if "Custom" is a valid SystemPurposeId)**
+  // const isCustomPurpose = systemPurposeId === SystemPurposeId.Custom; 
 
-  const isCustomPurpose = systemPurposeId === 'Custom';
+  // **Scenario 2 Fix (uncomment to check for null and non-"Custom" values)**
+   const isCustomPurpose = (systemPurposeId ?? '') !== 'Custom';
 
-  const { selectedPurpose, fourExamples } = React.useMemo(() => {
-    const selectedPurpose: SystemPurposeData | null = systemPurposeId ? (SystemPurposes[systemPurposeId] ?? null) : null;
-    // const selectedExample = selectedPurpose?.examples?.length
-    //   ? selectedPurpose.examples[Math.floor(Math.random() * selectedPurpose.examples.length)]
-    //   : null;
-    const fourExamples = selectedPurpose?.examples?.slice(0, 4) ?? null;
-    return { selectedPurpose, fourExamples };
-  }, [systemPurposeId]);
-
+  // **Scenario 3 Fix (uncomment for explicit null handling)**
+  /*
+  let isCustomPurpose;
+  if (systemPurposeId === null) {
+     Handle the null case
+    isCustomPurpose = false;
+  } else {
+    isCustomPurpose = systemPurposeId === 'Custom';
+  } 
+  */
 
   const unfilteredPurposeIDs = (filteredIDs && showFinder) ? filteredIDs : Object.keys(SystemPurposes) as SystemPurposeId[];
   const visiblePurposeIDs = editMode ? unfilteredPurposeIDs : unfilteredPurposeIDs.filter(id => !hiddenPurposeIDs.includes(id));
